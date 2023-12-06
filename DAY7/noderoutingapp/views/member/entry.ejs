@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>회원가입</title>
+    </head>
+
+    <body>
+        <h1>회원가입페이지</h1>
+        <form action="/member/entry" method="post" onsubmit="return fnFormCheck();">
+
+            메일주소: <input type="text" name="email" id="email" value=""/><br/>
+            암호: <input type="password" name="password" id="password" /><br/>
+            이름: <input type="text" name="name" id="name"/><br/>
+            연락처: <input type="text" name="telephone" id="telephone" /><br/>
+            <input type="submit" value="회원가입"/>
+
+            <script>
+                function fnFormCheck(){
+                    if(document.getElementById("email").value == ""){
+                        alert("메일주소를 입력해주세요.");
+                        document.getElementById("email").focus();
+                        return false;
+                    }
+
+                    if(document.getElementById("password").value == ""){
+                        alert("암호를 입력해주세요.");
+                        document.getElementById("password").focus();
+                        return false;
+                    }
+
+                    if(document.getElementById("name").value == ""){
+                        alert("이름를 입력해주세요.");
+                        document.getElementById("name").focus();
+                        return false;
+                    }
+
+                    if(document.getElementById("telephone").value == ""){
+                        alert("연락처를 입력해주세요.");
+                        document.getElementById("telephone").focus();
+                        return false;
+                    }
+
+                    return true;
+                }
+            </script>
+
+        </form>
+    </body>
+</html>
