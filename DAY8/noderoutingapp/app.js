@@ -7,11 +7,11 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-//step1: 개발자가 정의한 라우터파일을 참조합니다
-var authRouter = require('./routes/auth');
+//개발자정의 상품정보 관리 전용 RESTFul API 라우팅 파일참조
+var productAPIRouter = require('./routes/productAPI');
 
-//회원정보 처리 전용 라우터 파일 참조
-var memberRouter = require('./routes/member');
+//상품목록 웹페이지에 대한 라우터 파일 참조?
+var productRouter = require('./routes/product');
 
 var app = express();
 
@@ -25,20 +25,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//index.js 기본 라우터의 기본 주소체계정의
-//localhost:3000/~
 app.use('/', indexRouter);
-
-//localhost:3000/users/~
 app.use('/users', usersRouter);
 
-//AUTH라우터파일의 기본호출 주소체계 정의
-//auth.js라우터의 모든 라우팅메소드는 http://localhost3000:/auth/~~
-app.use('/auth', authRouter);
+//productAPIRouter의 기본주소를  /api/product으로 설정해준다
+//모든 RESTAPI 라우터의 최상위 기본주소는 되도록 /api/~로 시작되게하면 좋다
+app.use('/api/product', productAPIRouter);
 
-//use()메소드
-//member.js 라우터의 기본주소 체계를 정의한다
-app.use('/member', memberRouter); //항상 도메인주소가 생략 /앞에
+//일반상품 웹페이지 요청처리응답 라우팅 기본주소체계 설정
+app.use('/product', productRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

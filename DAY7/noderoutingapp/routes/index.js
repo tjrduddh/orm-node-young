@@ -29,8 +29,7 @@ router.get('/', function(req, res, next) {
 
 //회사소개 웹페이지 요청과 응답처리 라우팅 메소드
 //step1: 라우팅 메소드의 기본 호출주소체계를 정의한다
-//http://localhost:3000/intro
-//http://localhost:3000/icompany
+//http://localhost:3000/company
 //router.get('사용자가 호출하는 주소체계정의',호출된 주소에서 처리해야할 응답처리를 위한 콜백함수);
 router.get('/company',function(req,res){
   //req: HttpRequest객체이고 웹브라우저 또는 클라이언트에서 넘어오는 각종 요청정보 담겨있다

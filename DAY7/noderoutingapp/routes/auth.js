@@ -19,8 +19,9 @@ router.get('/login',function(req,res){
 //호출방식: POST
 router.post('/login',function(req,res){
 
-    //step1: 사용자 로그인 페이지에서 사용자 입력한 메일주소와 암호값을 추출한다
+    //step1: 사용자 로그인 페이지에서 사용자가 입력한 메일주소와 암호값을 추출한다
     //사용자가 입력한 값들은 웹브라우저를 통해 전달되기 때문에 req=HttpRequest 객체를 통해 사용자가 입력한 값을 추출한다
+    //req를 통해 login.ejs파일 안에 있는 body태그 안에 입력된 이메일과 비밀번호를 가져온다
     var email = req.body.email;
     var password = req.body.password;
 

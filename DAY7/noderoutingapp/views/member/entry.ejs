@@ -7,12 +7,22 @@
 
     <body>
         <h1>회원가입페이지</h1>
+        <!-- action : http://localhost:3000/member/entry 입력한 데이터를 어디로 보낼지 -->
+        <!-- get 메소드방식은 입력한 정보가 url에 노출된다. 그래서 해킹을 당할 수 있어 보안이 취약 -->
         <form action="/member/entry" method="post" onsubmit="return fnFormCheck();">
 
+            <!-- input요소의 name속성에 지정된 값은 백엔드 라우팅메소드에서
+            req.body.UI요소의 네임값으로 사용되어 사용자 입력한 해당 HTML요소의 값을
+            추출할 수 있게 도와준다 -->
+
+            <!-- id속성은 사용자가 입력한 정보를 함수에서 유효성검사에 사용하기위해 id값을 지정해준다 -->
             메일주소: <input type="text" name="email" id="email" value=""/><br/>
             암호: <input type="password" name="password" id="password" /><br/>
             이름: <input type="text" name="name" id="name"/><br/>
             연락처: <input type="text" name="telephone" id="telephone" /><br/>
+            <!-- 회원가입 submit 버튼이 클릭되면 form태그 이벤트 중에 onsubmit() 실행 -->
+            <!-- submit: form태그 안에 있어야하고 지정한 주소 서버로 보내기위해 사용
+            서버로 보내기전 onsubmit="return 함수( )" 이벤트에서 유효성검사를 체크한다 -->
             <input type="submit" value="회원가입"/>
 
             <script>
