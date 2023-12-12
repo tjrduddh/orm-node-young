@@ -44,10 +44,10 @@ router.get('/',async(req,res)=>{
             ipaddress:"123.111.111.111",
             registDate:Date.now(),
             registMemberId:"young3"
-        },
+        }
     ];
 
-    res.render('article/list.ejs',{articles})
+    res.render('article/list.ejs',{articles});
 });
 
 
@@ -158,7 +158,6 @@ router.get('/delete',async(req,res)=>{
     //해당 게시글 번호를 이용해 DB에서 해당 게시글 삭제한다
 
     //삭제완료 후 게시글 목록 페이지로 이동한다.
-
     res.redirect("/articles");
 });
 

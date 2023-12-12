@@ -6,7 +6,7 @@ var createError = require('http-errors');
 //node express 웹 개발 프레임워크를 참조합니다.
 var express = require('express');
 
-//psth라는 노드 프레임워크의 파일/폴더 경로정보를 추출하는 패키지를 참조합니다.
+//path라는 노드 프레임워크의 파일/폴더 경로정보를 추출하는 패키지를 참조합니다.
 var path = require('path');
 
 //웹서버에서 발급해주는 쿠키파일에 대한 정보를 추출하는 cookie-parser 패키지를 참조합니다.
