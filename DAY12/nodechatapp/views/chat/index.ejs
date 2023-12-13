@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>채팅 웹페이지 정보</title>
+  </head>
+
+  <body>
+    <h1>채팅 웹페이지 정보</h1>
+
+
+    <form action="/chat/index" method="post">
+      <table>
+        <tr>
+          <td>조회 옵션 채널명</td>
+          <td><input type="text" name="channel_name"></td>
+        </tr>
+
+        <tr>
+          <td><input type="submit" value="조회하기"></td>
+        </tr>
+      </table>
+    </form>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>채널고유번호</th>
+          <th>사용자고유번호</th>
+          <th>사용자닉네임</th>
+          <th>사용자유형</th>
+          <th>접속상태코드</th>
+          <th>최근접속일시</th>
+          <th>최근아웃일시</th>
+          <th>커넥션아이디</th>
+          <th>메시지상태코드</th>
+          <th>아이피주소</th>
+          <th>수정일시</th>
+          <th>수정자아이디</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+
+        <% for(var i=0;i<chatlists.length;i++) {%>
+                    <tr>
+                        <td><%=chatlists[i].channelNum%></td>
+                        <td><%=chatlists[i].userNum%></td>
+                        <td><%=chatlists[i].userNickname%></td>
+                        <td><%=chatlists[i].userLog%></td>
+                        <td><%=chatlists[i].connectStatus%></td>
+                        <td><%=chatlists[i].enterDate%></td>
+                        <td><%=chatlists[i].outDate%></td>
+                        <td><%=chatlists[i].connectionId%></td>
+                        <td><%=chatlists[i].msgStatus%></td>
+                        <td><%=chatlists[i].ipAddress%></td>
+                        <td><%=chatlists[i].editDate%></td>
+                        <td><%=chatlists[i].editId%></td>
+                    </tr>
+                <% } %>
+      </tbody>
+    </table>
+    <a href="/">사용자 페이지 이동</a>
+  </body>
+</html>
