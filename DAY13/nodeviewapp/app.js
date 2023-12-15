@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var articleRouter = require('./routes/article');
+var articleAPIRouter = require('./routes/articleAPI');
 
 var app = express();
 
@@ -25,7 +26,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.use('/article', articleRouter);
-
+app.use('/api/article', articleAPIRouter);
 
 
 

@@ -116,25 +116,25 @@
                                 <div class="form-group">
                                     <label class="control-label" for="OrderNo">게시판</label>
                                     <select name="board_type_code" id="board_type_code" class="form-control">
-                                        <option value="0"<% if(searchOption.board_type_code == "0"){ %> selected <% } %> >전체</option>
-                                        <option value="1"<% if(searchOption.board_type_code == "1"){ %> selected <% } %> >공지게시판</option>
-                                        <option value="2"<% if(searchOption.board_type_code == "2"){ %> selected <% } %> >기술블로그</option>
+                                        <option value="0">전체</option>
+                                        <option value="1">공지게시판</option>
+                                        <option value="2">기술블로그</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label" for="OrderName">제목</label>
-                                    <input type="text" name="title" value="<%=searchOption.title%>"class="form-control">
+                                    <input type="text" name="title" value=""class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label" for="MobileNo">게시여부</label>
                                     <select name="is_display_code" id="is_display_code" class="form-control">
-                                        <option value="9" <% if(searchOption.is_display_code == "9"){ %> selected <% } %>>전체</option>
-                                        <option value="1" <% if(searchOption.is_display_code == "1"){ %> selected <% } %>>게시함</option>
-                                        <option value="0" <% if(searchOption.is_display_code == "0"){ %> selected <% } %>>게시안함</option>
+                                        <option value="9">전체</option>
+                                        <option value="1">게시함</option>
+                                        <option value="0">게시안함</option>
                                     </select>
                                 </div>
                             </div>
@@ -157,50 +157,16 @@
                                             <tr>
                                                 <th width="5%">순번</th>
                                                 <th width="10%">게시판구분</th>
-                                                <th width="15%">제목</th>
-                                                <th width="35%">내용</th>
+                                                <th width="50%">제목</th>
                                                 <th width="5%">조회수</th>
                                                 <th width="5%">IP주소</th>
                                                 <th width="5%">게시상태</th>
                                                 <th width="10%">등록일자</th>
-                                                <th width="5%">작성자</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="hoverTblBody">
 
-                                            <% for(var i =0;i<articles.length;i++){ %>
-                                                
-                                                <tr>
-                                                    <td><%=articles[i].article_id%></td>
-                                                    <td>
-                                                        <% if(articles[i].board_type_code == 1){%>
-                                                            공지게시판
-                                                        <% } else{ %>
-                                                            기술블로그
-                                                        <% }%>
+                                        <tbody class="hoverTblBody" id="list">
 
-                                                        
-                                                            
-                                                    </td>
-                                                    <td><a href="/article/modify/1"><%=articles[i].title%></a></td>
-                                                    <td><%=articles[i].contents%></td>
-                                                    <td><%=articles[i].viwe_count%></td>
-                                                    <td><%=articles[i].ip_address%></td>
-                                                    <td>
-                                                        <% if(articles[i].is_display_code == 1){%>
-                                                            게시함
-                                                        <% } else{ %>
-                                                            게시안함
-                                                        <% }%>
-                                                    </td>
-                                                    <td><%=articles[i].reg_date%></td>
-                                                    <td><%=articles[i].reg_member_id%></td>
-                                                </tr>
-                
-                                            <% } %>
-
-
-                
                                         </tbody>
                                     </table>
 
@@ -244,27 +210,45 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
+
+    <!-- JQuery Ajax기반으로 프론트엔드 기능 구현하는 프론트엔드 개발영역 -->
     <script>
 
-        //조회폼 입력 유효성 검사
-        //순수 자바스크립트 사용시
-        //  document.getElementById("searchForm")
-        $("#searchForm").submit(function(){
+        //list.html 웹페이지가 서버에서 브라우저로 완전 렌더링 완료된 시점에서
+        //백엔드 REST API 서비스를 통해 전체 게시글 목록 순수 데이터를 조회해온다.
+        $(document).ready(function(){
 
-            // if($("#board_type_code").val() == 0){
-            //     alert("게시판 유형을 선택해주세요.");
-            //     $("#board_type_code").focus();
-            //     return false; 
-            // } 
+            //step1: 백엔드 RESTful API서비스에서 전체 게시글 목록 데이터를 조회해온다.
+            //Jquery AJAX get메소드를 통해 get방식으로 restful api 라우팅 메소드를 호출한다
+            $.get('http://localhost:3000/api/article/all',function(result){
+                console.log('백엔드에서 전달된 조회결과 확인:',result);
 
-            // if($("#is_display_code").val() == 9){
-            //     alert("게시여부를 선택해주세요.");
-            //     $("#is_display_code").focus();
-            //     return false; 
-            // } 
 
-            return true;
+                $.each(result.data,function(i,item){
+                    console.log("배열내 단일 데이터 출력:",item);
+
+
+                    var trTag = `
+                        <tr>
+                            <td>${item.article_id}</td>
+                            <td>공지게시판</td>
+                            <td><a href="/article/modify/${item.article_id}">${item.title}</a></td>
+                            <td>10</td>
+                            <td>111.222.111.222</td>
+                            <td>게시안함</td>
+                            <td>2023-12-15</td>
+                        </tr>
+                `;
+
+                    $("#list").append(trTag);
+                });
+
+
+            });
+
+
         });
+
     </script>
 
 
