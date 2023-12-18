@@ -237,6 +237,7 @@ router.get('/:aidx',async(req,res)=>{
             viwe_count:10,
             ip_address:"111.111.124.44",
             is_display_code:1,
+            article_type_code:1,
             reg_date:"2023-12-14",
             reg_member_id:"young"
         }

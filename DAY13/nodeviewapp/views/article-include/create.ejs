@@ -1,8 +1,43 @@
+<!DOCTYPE html>
+<html>
 
+<head>
 
+    <!-- 알파벳 영어가 아닌 언어로 구성되어 있을 때 -->
+    <meta charset="utf-8">
 
+    <!--
+    device-width 디바이스의 물리적인 길이을 맞춰주는 기능?
+    initial-scale 폰에서 손가락으로 확대할 수 있게 해주는 기능
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 검색엔진최적화 - 검색했을때 나오는 제목들이 title -->
+    <title>INSPINIA | Main view</title>
 
+    <!-- public폴더의 하위폴더경로 /~/~  -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
 
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+
+    <!--추가 스타일-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!--좌측 메뉴 영역-->
+        <% include ../common/left.ejs %>
+
+        <!--우측 영역-->
+        <div id="page-wrapper" class="gray-bg">
+
+            <!--우측 상단 영역 -->
+            <% include ../common/header.ejs %>
 
             <!--우측 콘텐츠 헤더영역 -->
             <div class="row wrapper border-bottom white-bg page-heading">
@@ -112,6 +147,38 @@
             </form>
             
 
+            <!--우측 하단 풋터 영역-->
+            <% include ../common/footer.ejs %>
+
+        </div>
+    </div>
+
+<!-- 
+    클라이언트 스크립트가 헤드에 있어도 되지만 왜 맨 아래에 위치해 있는가?
+    원칙상으로는 </body>닫는 태그 바로 위에 작성을 한다. 
+    위에 코드의 페이지가 로드가 되고 스크립트 기능이 작동한다.
+    중간에 위치해 있다면 아직 렌더링이 안된 상태에서 작동하기 때문에 오류가 날 수 있다.
+-->
+
+    <!-- Mainly scripts -->
+    <!--
+    jquery - 자바스크립트를 좀 더 빠르고 생산적으로 도와주는 라이브러리
+    -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+    <script src="/js/plugins/pace/pace.min.js"></script>
+
+
+    <!--추가 스크립트-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <script>
 
         //서버에서 보내준 html웹페이지가 사용자 웹브라우저에
@@ -177,3 +244,7 @@
             return true;
         });
     </script>
+
+</body>
+
+</html>
