@@ -121,7 +121,7 @@ router.post('/create',async(req,res)=>{
 
         
 
-        //step2: DB article 테이블에 데이터를 등록하고 등록된 데이터를 반환한다
+        //step3: DB article 테이블에 데이터를 등록하고 등록된 데이터를 반환한다
         const savedArticle = {
                 article_id:1,
                 board_type_code:1,
@@ -135,7 +135,7 @@ router.post('/create',async(req,res)=>{
             }
 
 
-            //step3:
+            //step4:
             apiResult.code = 200;
             apiResult.data = savedArticle;
             apiResult.result = "ok";
@@ -191,12 +191,12 @@ router.post('/update',async(req,res)=>{
         };
 
 
-        //step2: 수정처리 후 처리건수가 반환됨
+        //step3: 수정처리 후 처리건수가 반환됨
         //db 수정처리함 처리후 적용건수 1이 반환됬다고 가정함,,
         var affectedCnt = 1;
 
 
-        //step3: 정상 수정된 정보를 apiResult객체 바인딩함
+        //step4: 정상 수정된 정보를 apiResult객체 바인딩함
         apiResult.code = 200;
         apiResult.data = affectedCnt;
         apiResult.result = "ok";
