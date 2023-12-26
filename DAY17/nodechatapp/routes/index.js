@@ -9,12 +9,12 @@ var router = express.Router();
 // - http://localhost:3000/
 // */
 // router.get('/', async(req, res, next)=> {
-//   res.render('index');
+//   res.render('chat/index');
 // });
 
 
 // 사용자 웹사이트 로그인 페이지 요청 및 응답
-// localhost:3000/login
+// localhost:3000/
 router.get('/',async(req,res)=>{
   res.render('login',{layout:"authLayout"});
 });
@@ -36,12 +36,14 @@ router.get('/entry',async(req,res)=>{
 //회원가입 처리 요청 및 응답,회원가입 완료 후 로그인 페이지 이동처리
 router.post('/entry',async(req,res)=>{
 
+    //사용자가 입력한 정보 추출
     var email = req.body.email;
     var password = req.body.password;
     var name = req.body.name;
     var phone = req.body.phone;
     var birth = req.body.birth;
 
+    //DB 신규회원등록 처리
     var member = {
         email,
         password,

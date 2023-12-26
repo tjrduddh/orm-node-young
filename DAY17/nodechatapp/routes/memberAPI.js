@@ -324,9 +324,9 @@ router.get('/:mid',async(req,res)=>{
     }
 
 
- 
+
     res.json(apiResult);
- });
+});
 
 
- module.exports = router;
+module.exports = router;
