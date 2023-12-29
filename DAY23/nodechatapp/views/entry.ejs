@@ -1,7 +1,7 @@
 				<!-- 회원가입 컨텐츠 영역 -->
 				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 					<div class="login-wrapper">
-						<form action="/">
+						<form action="/entry" method="post">
 							<div class="login-screen">
 								<div class="login-body">
 									<a href="#" class="login-logo">
@@ -9,15 +9,15 @@
 									</a>
 									<h6>Welcome to Quick Chat App,<br>Create your account.</h6>
 									<div class="field-wrapper">
-										<input type="email" autofocus>
+										<input type="email" name="email" autofocus>
 										<div class="field-placeholder">이메일 ID</div>
 									</div>
 									<div class="field-wrapper">
-										<input type="password">
+										<input type="password" name="password">
 										<div class="field-placeholder">패스워드</div>
 									</div>
 									<div class="field-wrapper mb-3">
-										<input type="text">
+										<input type="text" name="name" >
 										<div class="field-placeholder">이름</div>
 									</div>
 									<div class="actions">

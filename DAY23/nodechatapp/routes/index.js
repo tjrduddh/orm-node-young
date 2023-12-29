@@ -13,7 +13,7 @@ var db = require('../models/index');
 router.get('/',async(req,res)=>{
 
 
-  res.render('login',{layout:"authLayout"});
+  res.render('login',{resultMsg:'',email:'',password:'',layout:"authLayout"});
 });
 
 
@@ -26,7 +26,26 @@ router.post('/',async(req,res)=>{
 
   
 
-  res.redirect('/chat');
+  var member = await db.Member.findOne({where:{email}});
+
+  resultMsg = '';
+
+  if(member == null){
+    resultMsg = "동일한 메일주소가 존재하지 않습니다.";
+  }else{
+
+    if(member.member_password == password){
+      res.redirect('/chat');
+    }else{
+      resultMsg = "암호가 일치하지 않습니다.";
+    }
+  }
+
+  if(resultMsg !== ''){
+    res.render('login',{resultMsg,email,password,layout:"authLayout"});
+  }
+
+  
 });
 
 
@@ -54,11 +73,11 @@ router.post('/entry',async(req,res)=>{
         // profile_img_path:0,
         // telephone:"010-1111-1111",
         // entry_type_code:
-    }  //회원가입 연동시키기 이어서~~
+    }  
 
     var savedMember = await db.Member.create(member);
 
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 

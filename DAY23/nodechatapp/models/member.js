@@ -26,37 +26,37 @@ module.exports = function(sequelize,DataTypes){
         },
         profile_img_path: {
             type: DataTypes.STRING(300),
-            allowNull: false,
+            allowNull: true,
             comment: '프로필이미지경로',
         },
         telephone: {
             type: DataTypes.STRING(20),
-            allowNull: false,
+            allowNull: true,
             comment: '전화번호',
         },
         entry_type_code: {
             type: DataTypes.TINYINT,
-            allowNull: false,
+            allowNull: true,
             comment: '가입유형코드 0:직접가입 1:SNS',
         },
         use_state_code: {
             type: DataTypes.TINYINT,
-            allowNull: false,
+            allowNull: true,
             comment: '가입상태코드 0:승인대기 1:사용중 2:탈퇴처리',
         },
         birth_date: {
             type: DataTypes.STRING(6),
-            allowNull: false,
+            allowNull: true,
             comment: '생년월일',
         },
         reg_date: {
             type: DataTypes.DATE,
-            allowNull: false,
+            allowNull: true,
             comment: '등록일시',
         },
         reg_member_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             comment: '등록자고유번호',
         },
         edit_date: {

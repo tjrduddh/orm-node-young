@@ -1,7 +1,7 @@
                 <!-- 우측 컨텐츠 영역 -->
 				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 					<div class="login-wrapper">
-						<form action="/chat">
+						<form action="/" method="post">
 							<div class="login-screen">
 								<div class="login-body">
 									<a href="#" class="login-logo">
@@ -16,9 +16,10 @@
 										<input type="password" name="password">
 										<div class="field-placeholder">패스워드</div>
 									</div>
+									<p id="message"></p>
 									<div class="actions">
 										<a href="/find">Forgot password?</a>
-										<button type="submit" class="btn btn-primary">Login</button>
+										<button type="submit" class="btn btn-primary">로그인</button>
 									</div>
 								</div>
 								<div class="login-footer">
@@ -28,3 +29,13 @@
 						</form>
 					</div>
 				</div>
+
+				<!-- <script>
+					var result = "<%=resultMsg%>";
+
+
+					if(result != ""){
+						//alert(result);
+						document.getElementById("message").innerText = result;
+					}
+				</script> -->
