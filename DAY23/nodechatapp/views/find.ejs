@@ -1,7 +1,7 @@
 				<!-- 비번찾기 컨텐츠 영역 -->
 				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 					<div class="login-wrapper">
-						<form action="/">
+						<form action="/find" method="post">
 							<div class="login-screen">
 								<div class="login-body pb-4">
 									<a href="#" class="login-logo">
@@ -9,11 +9,12 @@
 									</a>
 									<h6>In order to access your account, please enter the email id you provided during the registration process.</h6>
 									<div class="field-wrapper mb-3">
-										<input type="email" autofocus>
-										<div class="field-placeholder">Email ID</div>
+										<input type="email" name="email" autofocus>
+										<div class="field-placeholder">이메일</div>
 									</div>
+									<p id="message"></p>
 									<div class="actions">
-										<button type="submit" class="btn btn-primary ml-auto">Submit</button>
+										<button type="submit" class="btn btn-primary ml-auto">로그인하러 가기</button>
 									</div>
 								</div>
 							</div>

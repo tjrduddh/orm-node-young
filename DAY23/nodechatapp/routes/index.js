@@ -30,7 +30,7 @@ router.post('/',async(req,res)=>{
 
   resultMsg = '';
 
-  if(member == null){
+  if(member == null){ 
     resultMsg = "동일한 메일주소가 존재하지 않습니다.";
   }else{
 
@@ -69,10 +69,7 @@ router.post('/entry',async(req,res)=>{
     var member = {
         email,
         member_password,
-        name,
-        // profile_img_path:0,
-        // telephone:"010-1111-1111",
-        // entry_type_code:
+        name
     }  
 
     var savedMember = await db.Member.create(member);
@@ -85,7 +82,7 @@ router.post('/entry',async(req,res)=>{
 
 // 암호 찾기 웹페이지 요청 및 응답
 router.get('/find',async(req,res)=>{
-  res.render('find');
+  res.render('find',{resultMsg:'',email:'',layout:"layout"});
 });
 
 
@@ -93,17 +90,24 @@ router.get('/find',async(req,res)=>{
 router.post('/find',async(req,res)=>{
 
     var email = req.body.email;
-    var name = req.body.name;
-    var phone = req.body.phone;
 
-    var member = {
-        email,
-        name,
-        phone,
-        findDate:Date.now()
+    var member = await db.Member.findOne({where:{email}});
+
+
+    var resultMsg = '';
+
+    if(member == null){
+      resultMsg = "등록된 이메일이 아닙니다.";
+    }else{
+      res.redirect('/');
     }
 
-  res.redirect('/login');
+    if(resultMsg !== ''){
+      res.render('find',{resultMsg,email});
+    }
+
+
+
 });
 
 
