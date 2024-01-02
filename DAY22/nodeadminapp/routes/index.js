@@ -11,7 +11,14 @@ var router = express.Router();
 -http://localhost:3001
 */
 router.get('/',async(req,res)=>{
-  res.render('login');
+  res.render('login',{layout:false});
+});
+
+
+
+
+router.get('/index',async(req,res)=>{
+  res.render('index',{layout:false});
 });
 
 
