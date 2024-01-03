@@ -17,18 +17,13 @@ router.get('/',async(req,res)=>{
 
 
 
-router.get('/index',async(req,res)=>{
-  res.render('index',{layout:false});
-});
-
-
 /*
 -관리자 계정으로 로그인 성공 이후에 최초로 보여줄 관리자 웹사이트 메인페이지
 -반드시 관리자 로그인 성공 후에 접속이 가능합니다
 -http://localhost:3001
 */
 router.post('/',async(req,res)=>{
-  res.render('index');
+  res.render('index',{layout:false});
 });
 
 
