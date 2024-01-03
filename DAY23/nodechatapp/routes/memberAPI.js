@@ -4,6 +4,123 @@
 var express = require('express');
 var router = express.Router();
 
+var db = require('../models/index');
+
+//회원 로그인 처리 전용 RESTFul API
+//http://localhost:3000/api/member/login
+router.post('/login', async (req,res) => {
+
+    var apiResult = {
+        code:200,
+        data:null,
+        result:""
+    }
+
+
+    try{
+
+
+    //사용자 입력 값
+    var email = req.body.email;
+    var password = req.body.password;
+
+    
+
+    var member = await db.Member.findOne({where:{email}});
+
+    resultMsg = '';
+
+    if(member == null){ 
+      resultMsg = "동일한 메일주소가 존재하지 않습니다.";
+
+      apiResult.code = 400;
+      apiResult.data = null;
+      apiResult.result = resultMsg;
+
+    }else{
+
+      if(member.member_password == password){
+        resultMsg = "로그인 성공";
+
+        apiResult.code = 200;
+        apiResult.data = member;
+        apiResult.result = resultMsg;
+
+      }else{
+        resultMsg = "암호가 일치하지 않습니다.";
+
+        apiResult.code = 400;
+        apiResult.data = null;
+        apiResult.result = resultMsg;
+
+      }
+    }
+
+
+    }catch(err){
+        resultMsg = "서버에러발생 관리자에게 문의해주세요.";
+
+        apiResult.code = 500;
+        apiResult.data = null;
+        apiResult.result = resultMsg;
+
+    }
+
+
+    
+
+
+    res.json(apiResult);
+});
+
+//회원가입 처리 전용 RESTFul API
+//http://localhost:3000/api/member/entry
+router.post('/entry', async (req,res) => {
+
+    var apiResult = {
+        code:200,
+        data:[],
+        result:""
+    }
+
+    try{
+
+    //사용자가 입력한 정보 추출
+    var email = req.body.email;
+    var member_password = req.body.password;
+    var name = req.body.name;
+    
+    
+    //DB 신규회원등록 처리
+    var member = {
+        email,
+        member_password,
+        name
+    }  
+    
+    const savedMember = await db.Member.create(member);
+
+    apiResult.code = 200;
+    apiResult.data = savedMember;
+    apiResult.result = "ok";
+
+    }catch(err){
+
+    apiResult.code = 500;
+    apiResult.data = null;
+    apiResult.result = "failed";
+
+    }
+
+    res.json(apiResult);
+
+});
+
+
+router.post('/find', async (req,res) => {
+
+});
+
 
 //전체 사용자정보 목록 데이터 조회 반환 API 라우팅 메소드
 //http://localhost:3000/api/member/all
@@ -12,8 +129,8 @@ router.get('/all',async(req,res)=>{
     //API라우팅 메소드 반환형식 정의
     var apiResult = {
         code:200,
-        data:[],
-        result:"ok"
+        data:null,
+        result:""
     };
 
     //예외처리 구문
