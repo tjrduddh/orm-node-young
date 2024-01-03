@@ -79,7 +79,7 @@ router.post('/entry', async (req,res) => {
 
     var apiResult = {
         code:200,
-        data:[],
+        data:null,
         result:""
     }
 
@@ -90,7 +90,7 @@ router.post('/entry', async (req,res) => {
     var member_password = req.body.password;
     var name = req.body.name;
     
-    
+
     //DB 신규회원등록 처리
     var member = {
         email,
@@ -119,6 +119,49 @@ router.post('/entry', async (req,res) => {
 
 router.post('/find', async (req,res) => {
 
+    var apiResult = {
+        code:200,
+        data:null,
+        result:""
+    }
+
+    try{
+
+        var email = req.body.email;
+
+        var member = await db.Member.findOne({where:{email}});
+
+        resultMsg = "";
+    
+        if(member == null){
+            resultMsg = "실패: 동일한 이메일이 없습니다."
+
+            apiResult.code = 400;
+            apiResult.data = null;
+            apiResult.result = resultMsg;
+
+        }else{
+            resultMsg = "성공: 이메일 찾았다."
+
+            apiResult.code = 200;
+            apiResult.data = member;
+            apiResult.result = resultMsg;
+
+        }
+
+
+    }catch(err){
+
+        resultMsg = "서버에러발생 관리자에게 문의해주세요.";
+
+        apiResult.code = 500;
+        apiResult.data = null;
+        apiResult.result = resultMsg;
+
+    };
+
+
+    res.json(apiResult);
 });
 
 
@@ -141,57 +184,12 @@ router.get('/all',async(req,res)=>{
 
 
         //step1: DB에서 전체 사용자정보 목록 데이터를 조회한다.
-        const member_list = [
-            {
-                member_id: 1,
-                email: 'hwoarang09@naver.com',
-                member_password: '맴버1비번',
-                name: '윤성원',
-                profile_img_path: '멤버1이미지주소',
-                telephone: '01022883839',
-                entry_type_code: 1,
-                use_state_code: 1,
-                birth_date: '900311',
-                reg_date: Date.now(),
-                reg_member_id: 881,
-                edit_date: Date.now(),
-                edit_member_id: 991
-            },
-            {
-                member_id: 2,
-                email: 'rang0909@naver.com',
-                member_password: '맴버2비번',
-                name: '윤성일',
-                profile_img_path: '멤버2이미지주소',
-                telephone: '01122883839',
-                entry_type_code: 1,
-                use_state_code: 1,
-                birth_date: '910312',
-                reg_date: Date.now(),
-                reg_member_id: 882,
-                edit_date: Date.now(),
-                edit_member_id: 992
-            },
-            {
-                member_id: 3,
-                email: 'a01022883839@gmail.ocm',
-                member_password: '맴버3비번',
-                name: '윤성삼',
-                profile_img_path: '멤버3이미지주소',
-                telephone: '01222883839',
-                entry_type_code: 0,
-                use_state_code: 0,
-                birth_date: '900313',
-                reg_date: Date.now(),
-                reg_member_id: 883,
-                edit_date: Date.now(),
-                edit_member_id: 993
-            }
-        ];
+        const members = await db.Member.findAll();
+
 
         //프론트엔드로 실제 반환할 데이터 바인딩
         apiResult.code = 200;
-        apiResult.data = member_list;
+        apiResult.data = members;
         apiResult.result = "ok";
 
 
@@ -229,46 +227,19 @@ router.post('/create',async(req,res)=>{
         var email = req.body.email;
         var member_password = req.body.member_password;
         var name = req.body.name;
-        var profile_img_path = req.body.profile_img_path;
-        var telephone = req.body.telephone;
-        var entry_type_code = req.body.entry_type_code;
-        var birth_date = req.body.birth_date;
+
 
 
         //추출된 사용자 입력데이터를 단일 JSON데이터로 구성해서 DB테이블에 영구적으로 저장처리
         var member = {
-        member_id: 1,
-        email,
-        member_password,
-        name,
-        profile_img_path,
-        telephone,
-        entry_type_code,
-        use_state_code:1,
-        birth_date,
-        reg_date: Date.now(),
-        reg_member_id: 881,
-        edit_date: Date.now(),
-        edit_member_id: 991
+            email,
+            member_password,
+            name
         };
 
 
         //저장 후 DB테이블에 저장된 데이터를 반환한다
-        const savedMember = {
-            member_id: 3,
-            email: 'a01022883839@gmail.ocm',
-            member_password: '맴버3비번',
-            name: '윤성삼',
-            profile_img_path: '멤버3이미지주소',
-            telephone: '01222883839',
-            entry_type_code: 0,
-            use_state_code: 0,
-            birth_date: '900313',
-            reg_date: Date.now(),
-            reg_member_id: 883,
-            edit_date: Date.now(),
-            edit_member_id: 993
-        }
+        const savedMember = await db.Member.create(member);
 
         //프론트엔드로 실제 반환할 데이터 바인딩
         //정상 등록된 데이터를 apiResult객체에 바인딩함
@@ -288,7 +259,9 @@ router.post('/create',async(req,res)=>{
     res.json(apiResult);
 });
 
+
 //단일 사용자정보 수정처리 API라우팅 메소드
+//http://localhost:3000/api/member/modify
 router.post('/modify',async(req,res)=>{
 
     //API라우팅 반환형식 정의
@@ -306,41 +279,28 @@ router.post('/modify',async(req,res)=>{
         var email = req.body.email;
         var member_password = req.body.member_password;
         var name = req.body.name;
-        var profile_img_path = req.body.profile_img_path;
-        var telephone = req.body.telephone;
-        var entry_type_code = req.body.entry_type_code;
-        var birth_date = req.body.birth_date;
+
 
         //추출된 데이터를 단일 JSON데이터로 구성해서 DB테이블에 수정처리를 반영한다
         var member = {
-            member_id,
             email,
             member_password,
-            name,
-            profile_img_path,
-            telephone,
-            entry_type_code,
-            use_state_code:1,
-            birth_date,
-            reg_date: Date.now(),
-            reg_member_id: 881,
-            edit_date: Date.now(),
-            edit_member_id: 991
+            name
             };
 
             //DB 수정처리 후 처리건수가 1이 반환됬다고 가정
-            var affectedCnt = 1;
+            var updatedCount = await db.Member.update(member,{where:{member_id}});
 
             //정상 수정된 정보를 apiResult객체 바인딩함
             apiResult.code = 200;
-            apiResult.data = affectedCnt;
+            apiResult.data = updatedCount;
             apiResult.result = "ok";
 
 
     }catch(err){
 
         apiResult.code = 500;
-        apiResult.data = 0;
+        apiResult.data = null;
         apiResult.result = "failed";
 
     }
@@ -348,7 +308,6 @@ router.post('/modify',async(req,res)=>{
 
     res.json(apiResult);
 });
-
 
 
 
@@ -371,12 +330,24 @@ router.post('/delete',async(req,res)=>{
         //DB 테이블에서 해당 사용자정보를 완전히 삭제한다
 
         //DB에서 삭제된 건수가 전달된다
-        var deletedCnt = 1;
+        var deletedCnt = await db.Member.destroy({where:{member_id}});
+
+        if(deletedCnt == 0){
+
+            apiResult.code = 400;
+            apiResult.data = null;
+            apiResult.result = "사용자가 존재하지 않습니다.";
+
+        }else{
 
         //정상 삭제된 정보를 apiResult객체에 바인딩함
         apiResult.code = 200;
         apiResult.data = deletedCnt;
         apiResult.result = "ok";
+
+        }
+
+
 
     }catch(err){
 
@@ -411,26 +382,24 @@ router.get('/:mid',async(req,res)=>{
         var member_id = req.params.mid;
 
         //DB에서 고유번호에 해당하는 단일 사용자정보 데이터를 조회해온다 
-        var member = {
-            member_id: 2,
-            email: 'rang0909@naver.com',
-            member_password: '맴버2비번',
-            name: '윤성일',
-            profile_img_path: '멤버2이미지주소',
-            telephone: '01122883839',
-            entry_type_code: 1,
-            use_state_code: 1,
-            birth_date: '910312',
-            reg_date: Date.now(),
-            reg_member_id: 882,
-            edit_date: Date.now(),
-            edit_member_id: 992
+        var member = await db.Member.findOne({where:{member_id}});
+
+        if(member == null){
+
+            apiResult.code = 400;
+            apiResult.data = member;
+            apiResult.result = "사용자가 존재하지 않습니다";
+
+        }else{
+
+            //정상 조회된 정보를 apiResult객체에 바인딩함
+            apiResult.code = 200;
+            apiResult.data = member;
+            apiResult.result = "ok";
+
         }
 
-        //정상 조회된 정보를 apiResult객체에 바인딩함
-        apiResult.code = 200;
-        apiResult.data = member;
-        apiResult.result = "ok";
+
 
     }catch(err){
 
