@@ -11,7 +11,6 @@ const Admin = require('../schemas/admin');
 
 
 
-
 //관리자 정보 목록 조회 웹페이지 요청 및 응답 라우팅 메소드
 router.get('/list',async(req,res)=>{
 
@@ -30,7 +29,7 @@ router.get('/list',async(req,res)=>{
 
 router.post('/list',async(req,res)=>{
 
-        //step1: 사용자가 선택/입력한 조회옵션 데이터를 추출한다
+        // //step1: 사용자가 선택/입력한 조회옵션 데이터를 추출한다
         var dept_name = req.body.dept_name;
         var admin_name = req.body.admin_name;
         var telephone = req.body.telephone;
@@ -42,28 +41,26 @@ router.post('/list',async(req,res)=>{
         }
 
 
-        const admins = [
-            {
-                admin_member_id:1,
-                company_code:1,
-                admin_id:"young",
-                admin_password:1234,
-                admin_name,
-                email:"young@test.com",
-                telephone,
-                dept_name,
-                used_yn_code:"이용중",
-                reg_user_id:1,
-                reg_date:Date.now(),
-                edit_user_id:1,
-                edit_date:Date.now()
-            }
-        ];
+        let Search = {};
+
+        if (dept_name !== '0') {
+            Search.dept_name = searchOption.dept_name;
+        }
+         // $regex : 부분 검색을 할 수 있게되어 많은 패턴들을 받아올 수 있다.
+         // $options : 대소문자 구별없이 검색이 가능하다
+        if (admin_name) { 
+            Search.admin_name = {$regex: admin_name, $options: 'i'};
+        }
+        if (telephone) {
+            Search.telephone = {$regex: telephone, $options: 'i'};
+        }
+
+        const admins = await Admin.find(Search)
 
         
 
 
-    res.render('admin/list',{admins,searchOption});
+    res.render('admin/list',{admins,searchOption,moment});
 });
 
 
@@ -75,29 +72,40 @@ router.get('/create',async(req,res)=>{
 router.post('/create',async(req,res) => {
 
         //step1: 사용자가 입력한 게시글 등록 데이터 추출
-        var dept_name =req.body.dept_name;
-        var admin_id =req.body.admin_id;
-        var admin_password =req.body.admin_password;
-        var email =req.body.email;
-        var admin_name =req.body.admin_name;
-        var telephone =req.body.telephone;
-        var used_yn_code =req.body.used_yn_code;
+        // var dept_name =req.body.dept_name;
+        // var admin_id =req.body.admin_id;
+        // var admin_password =req.body.admin_password;
+        // var email =req.body.email;
+        // var admin_name =req.body.admin_name;
+        // var telephone =req.body.telephone;
+        // var used_yn_code =req.body.used_yn_code;
+        // var reg_date =req.body.reg_date;
 
-        var admin = {
-            dept_name,
-            admin_id,
-            admin_password,
-            email,
-            admin_name,
-            telephone,
-            used_yn_code,
-            reg_date:Date.now(),
-            admin_member_id:0,
-            company_code:1,
-            reg_user_id:1
-        }
+        // var admin = {
+        //     dept_name,
+        //     admin_id,
+        //     admin_password,
+        //     email,
+        //     admin_name,
+        //     telephone,
+        //     used_yn_code,
+        //     reg_date,
+        //     company_code:1,
+        //     reg_user_id:1
+        // }
 
-        const createdAdmin = await Admin.create(admin);
+        const createdAdmin = await Admin.create({
+            dept_name :req.body.dept_name,
+            admin_id :req.body.admin_id,
+            admin_password :req.body.admin_password,
+            email :req.body.email,
+            admin_name :req.body.admin_name,
+            telephone :req.body.telephone,
+            used_yn_code :req.body.used_yn_code,
+            reg_date :req.body.reg_date,
+            company_code :1,
+            reg_user_id :1
+        });
 
 
     res.redirect('/admin/list');
@@ -107,7 +115,9 @@ router.post('/create',async(req,res) => {
 
 router.get('/delete', async (req,res) => {
 
-    var articleIdx = req.query.mid;
+    var adminIdx = req.query.mid;
+
+    var deleteCnt = await Admin.deleteOne({admin_member_id:adminIdx});
 
     res.redirect('/admin/list');
 });
@@ -119,33 +129,19 @@ router.get('/delete', async (req,res) => {
 
 router.get('/modify/:mid', async (req,res) => {
 
-    var articleIdx = req.params.mid;
+    var adminIdx = req.params.mid;
 
 
-    var admin = {
-        admin_member_id:articleIdx,
-        company_code:1,
-        admin_id:"young",
-        admin_password:1234,
-        admin_name:"천재1호",
-        email:"young@test.com",
-        telephone:"010-1111-2222",
-        dept_name:1,
-        used_yn_code:"이용중",
-        reg_user_id:1,
-        reg_date:Date.now(),
-        edit_user_id:1,
-        edit_date:Date.now()
-    }
+    var admin = await Admin.findOne({admin_member_id:adminIdx});
 
-    res.render('admin/modify',{admin});
+    res.render('admin/modify',{admin,moment});
 });
 
 
 
 router.post('/modify/:mid', async (req,res) => {
 
-    var articleIdx = req.params.mid;
+    var adminIdx = req.params.mid;
 
 
     var dept_name =req.body.dept_name;
@@ -157,7 +153,6 @@ router.post('/modify/:mid', async (req,res) => {
     var used_yn_code =req.body.used_yn_code;
 
     var admin = {
-        admin_member_id:articleIdx,
         dept_name,
         admin_id,
         admin_password,
@@ -168,6 +163,7 @@ router.post('/modify/:mid', async (req,res) => {
         reg_date:Date.now()
     }
 
+    var updatedCnt = await Admin.updateOne({admin_member_id:adminIdx},admin);
 
     res.redirect('/admin/list');
 });

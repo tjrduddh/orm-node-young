@@ -180,7 +180,7 @@
                                                     <td><%=admins[i].email%></td>
                                                     <td><%=admins[i].telephone%></td>
                                                     <td><%=admins[i].used_yn_code%></td>
-                                                    <td><%=admins[i].reg_date%></td>
+                                                    <td><%=moment(admins[i].reg_date).format('YYYY-MM-DD HH:mm')%></td>
                                                 </tr>
                                             
                                             <%} %>

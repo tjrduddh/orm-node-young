@@ -10,11 +10,6 @@ const { Schema } = mongoose;
 
 //Schema클래스를 생설할 때 생성자함수에 새로 만들 콜렉션의 스키마(데이터구조)를 정의합니다.
 const adminSchema = new Schema({
-    admin_member_id: {
-        type: Number,
-        required: true,
-        unique: true  //KEY설정
-    },
     company_code: {
         type: Number,
         required: true,

@@ -107,7 +107,7 @@
 
             <!--우측 콘텐츠 영역 -->
             <div class="wrapper wrapper-content">
-                <form action="/admin/modify/1" method="post">
+                <form action="/admin/modify/<%=admin.admin_member_id%>" method="post">
                     <div class="ibox-content m-b-sm border-bottom">
 
 
@@ -178,7 +178,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label">등록일시</label>
-                                    <input type="text" name="reg_date" class="form-control" value="<%=admin.reg_date%>">
+                                    <input type="text" name="reg_date" class="form-control" value="<%=admin.reg_date%>" disabled>
                                 </div>
                             </div>
     
