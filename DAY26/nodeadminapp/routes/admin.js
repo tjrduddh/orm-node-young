@@ -43,14 +43,18 @@ router.post('/list',async(req,res)=>{
 
         let Search = {};
 
+
         if (dept_name !== '0') {
             Search.dept_name = searchOption.dept_name;
         }
+
          // $regex : 부분 검색을 할 수 있게되어 많은 패턴들을 받아올 수 있다.
          // $options : 대소문자 구별없이 검색이 가능하다
         if (admin_name) { 
             Search.admin_name = {$regex: admin_name, $options: 'i'};
         }
+
+        // 변수명 자체가 조건일 때 ''빈값이 들어오면 조건 결괏값이 false가 되어 if문을 나간다.
         if (telephone) {
             Search.telephone = {$regex: telephone, $options: 'i'};
         }
