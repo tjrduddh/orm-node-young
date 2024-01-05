@@ -1,7 +1,7 @@
 				<!-- 비번찾기 컨텐츠 영역 -->
 				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 					<div class="login-wrapper">
-						<form action="/find" method="post">
+						<form action="/find" method="post" onsubmit="return checkForm()">
 							<div class="login-screen">
 								<div class="login-body pb-4">
 									<a href="#" class="login-logo">
@@ -9,7 +9,7 @@
 									</a>
 									<h6>In order to access your account, please enter the email id you provided during the registration process.</h6>
 									<div class="field-wrapper mb-3">
-										<input type="email" name="email" autofocus>
+										<input type="email" name="email" id="email" autofocus>
 										<div class="field-placeholder">이메일</div>
 									</div>
 									<p id="message"></p>
@@ -21,6 +21,18 @@
 						</form>
 					</div>
 				</div>
+
+				<script>
+					function checkForm(){
+						if(document.getElementById('email').value == ""){
+							alert("이메일을 입력해주세요.");
+							document.getElementById('email').focus();
+							return false;
+						}
+
+						return true;
+					}
+				</script>
 
 				<script>
 					var result = "<%=resultMsg%>";
