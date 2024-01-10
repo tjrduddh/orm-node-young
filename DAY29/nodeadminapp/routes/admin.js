@@ -101,7 +101,7 @@ router.post("/create", async (req, res, next) => {
 
 
 /*
-기능: 관리자 계정 정보 조회 및 수정처리 웹페이지 요청
+기능: 관리자 계정 정보 조회 웹페이지 요청
 호출주소: http://localhost:3000/admin/list
 */
 router.get("/modify/:aid", async (req, res, next) => {
