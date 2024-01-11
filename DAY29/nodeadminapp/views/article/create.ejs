@@ -26,7 +26,7 @@
             </div>
 
             <!--우측 콘텐츠 영역 -->
-            <form action="/article/create" id="articleForm" method="post">
+            <form action="/article/create" id="articleForm" method="post" enctype="multipart/form-data">
                 <div class="wrapper wrapper-content">
                     <div class="ibox-content m-b-sm border-bottom">
     
@@ -60,8 +60,11 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label class="control-label">게시글 내용</label>
-                                    <!-- name을 꼭 써주자 -->
-                                    <textarea class="form-control" name="contents" id="contents" rows="10" cols="5"></textarea>
+
+                                    <!-- SUMMERNOTE 웹에디터 표시영역 -->
+                                    <div class="summernote"></div>
+                                    <!-- name을 꼭 써주자
+                                    <textarea class="form-control" name="contents" id="contents" rows="10" cols="5"></textarea> -->
                                 </div>
                             </div>
                         </div>
@@ -101,7 +104,7 @@
                         </div>
 
 
-                        <!-- 글제목영역 -->
+                        <!-- 첨부파일영역 -->
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
@@ -131,8 +134,62 @@
             $("#board_type_code").focus();
             //alert("게시글 등록페이지가 렌더링 완료되었습니다.");
             console.log('게시글 등록페이지가 웹브라우저에 모두 렌더링 완료되었습니다');
+
+            // //summernote 웹에디터 설정하기
+            // $('.summernote').summernote();
+
+            $('.summernote').summernote({
+                height: 300,  //에디터의 디폴트 높이
+                minHeight: 250,  //최소 높이
+                maxHeight: 500,  //최대 높이
+                focus: false,  
+                lang: 'en-US',
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['fontsize','bold', 'underline', 'clear']],
+                    ['height', ['height']],
+                    ['color', ['color']],
+                    ['table', ['table']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['picture','link','video']],
+                    ['view', ['codeview', 'help']]
+                ],
+                callbacks: {
+                onImageUpload: function(files) {
+                    for (var i = 0; i < files.length; i++) {
+                        sendFile(files[i], this);
+                    }
+                }
+                }
+            });
         });
 
+
+        //프론트엔드에서 백엔드 업로드 api를 호출해서 파일업로드 처리
+        function sendFile(file,editor){
+
+            //AJAX기법으로 프론트엔드 폼데이터를 생성하고 전송하는 방법 안내
+            //순수자바스크립트로 form안에 전송할 데이터를 생성할 때 사용하는 객체
+            var data = new FormData();
+
+            //data.append("폼으로 전송할 name값","폼데이터값-선택파일정보")
+            data.append("file",file);
+
+            //AJAX를 통해 백엔드 RESTful 업로드 API를 호출해서 파일을 업로드한다.
+            $.ajax({
+                data:data,
+                type:"POST",
+                url:"/api/article/upload",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(result){
+                    console.log("파일업로드 처리결과: ",result);
+                    $(editor).summernote('insertImage', result.data.filePath); 
+                }
+
+            });
+        }
 
 
 
