@@ -116,6 +116,27 @@
 						return false;
 					}
 
+					if($("#password").val() == ""){
+						alert("암호를 입력해주세요.");
+						$("#password").focus();
+						return false;
+					}
+
+					if($("#passwordConfirm").val() == ""){
+						alert("암호 재확인 값을 입력해주세요.");
+						$("#passwordConfirm").focus();
+						return false;
+					}
+
+					if($("#password").val() != $("#passwordConfirm").val()){
+						alert("암호가 일치하지 않습니다.");
+						$("#password").val("");
+						$("#passwordConfirm").val("");
+						$("#password").focus();
+						return false;
+					}
+					
+
 					//AJAX로 사용자 회원가입 기능 구현 - 백엔드 RESTful과 연동처리함
 					var member = {
 						"email":$("#email").val(),
@@ -124,6 +145,8 @@
 						"telephone":$("#telephone").val()
 					};
 					
+					//$.post() 메소드는 서버에 HTTP POST 요청을 보내는 데 사용
+					//서버가 성공적으로 응답하면 .done() 콜백 내부의 코드가 실행
 					$.post('/api/member/entry',member).done(function(result){
 
 						console.log("백엔드에서 전달된 회원가입 결괏값: ",result);
