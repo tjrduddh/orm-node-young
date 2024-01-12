@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>AJAX RESTFul 기반 파일 업로드</h1>
+
+    <form action="">
+        파일첨부: <input type="file" name="file" id="file" style="width: 70%;"/><br>
+    </form>
+
+
+    <script src="/js/jquery-3.1.1.min.js"></script>
+
+    <script>
+
+        //사용자가 파일을 변경선택하면 발생하는 OnChange이벤트 처리
+        $("#file").change(function(){
+
+            //AJAX기법으로 프론트엔드 폼데이터를 생성하고 전송하는 방법 안내
+            //순수자바스크립트로 form안에 전송할 데이터를 생성할 때 사용하는 객체
+            var data = new FormData();
+
+            //data.append("폼으로 전송할 name값","폼데이터값-선택파일정보")
+            data.append("file",$("input[name=file]")[0].files[0]);
+
+            //file 값은 가져온 경로 자체가 문자열 값으로 넘어온다. fileName = "C:\\fakepath\\0.png"
+            var fileName = $("#file").val();
+
+            //indexOf : 주어진 요소인 "."이 문자열에 있다면 첫번째 인덱스로 지정하고 0을 반환한다
+            //slice : 첫번째 인덱스[0]인 "."에 +1이면 slice(1)이 된다. "." 다음부터 시작되는 문자를 제외하고 다 잘라내어 새로운 배열을 만든다. => png
+            //toLowerCase : String문자열을 소문자로 변환하여 반환합니다.
+            fileName = fileName.slice(fileName.indexOf(".") + 1).toLowerCase();
+
+            if(fileName != "jpg" && fileName != "png" && fileName != "gif" && fileName != "bmp"){
+                alert("이미지 파일은 (jpg,png,gif,bmp) 형식만 등록 가능합니다.");
+                $("#file").val("");
+                return false;
+            }
+
+            //AJAX를 통해 백엔드 RESTFul 업로드 API를 호출해서 파일을 업로드한다.
+            $.ajax({
+                data:data,
+                type:"POST",
+                url:"/api/article/upload",    // api/article/upload  OR  api/article/uploadS3
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(result){
+                    console.log("파일업로드 처리결과: ",result);
+                }
+
+
+            });
+        });
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
