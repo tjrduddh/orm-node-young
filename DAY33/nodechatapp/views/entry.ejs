@@ -1,0 +1,114 @@
+				<!-- 회원가입 컨텐츠 영역 -->
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+					<div class="login-wrapper">
+
+						<!-- 회원가입 폼 영역 -->
+						<form id="entryForm">
+							<div class="login-screen">
+								<div class="login-body">
+									<a href="#" class="login-logo">
+										<img src="/img/logo.svg" alt="Quick Chat">
+									</a>
+									<h6>Welcome to Quick Chat App,<br>Create your account.</h6>
+									<div class="field-wrapper">
+										<input type="email" name="email" id="email" autofocus>
+										<div class="field-placeholder">이메일</div>
+									</div>
+									<div class="field-wrapper">
+										<input type="password" name="password" id="password">
+										<div class="field-placeholder">비밀번호</div>
+									</div>
+									<div class="field-wrapper mb-3">
+										<input type="password" name="passwordConfirm" id="passwordConfirm" >
+										<div class="field-placeholder">비밀번호 확인</div>
+									</div>
+									<div class="field-wrapper mb-3">
+										<input type="text" name="name" id="name" >
+										<div class="field-placeholder">이름</div>
+									</div>
+									<div class="field-wrapper mb-3">
+										<input type="text" name="telephone" id="telephone" >
+										<div class="field-placeholder">전화번호</div>
+									</div>
+									<div class="field-wrapper mb-3">
+										<input type="file" name="profileImg" id="profileImg" >
+										<div class="field-placeholder">프로필사진</div>
+									</div>
+									<div class="actions">
+										<button type="submit" class="btn btn-primary ml-auto">회원가입완료</button>
+									</div>
+								</div>
+								<div class="login-footer">
+									<span class="additional-link">회원이신가요? <a href="/" class="btn btn-secondary">로그인하기</a></span>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div> 
+
+				<script>
+						//submit 이벤트가 발생하면 폼태그안에 버튼이 눌러져서 그 데이터가 어디론가 전송이 되기 전 단계에서 가로채는 이벤트
+						//사용자 입력값 유효성 검사
+						$("#entryForm").submit(function(){
+						
+							if($("#email").val() == ""){
+								alert("이메일을 입력해주세요.");
+								$("#email").focus();
+								return false;
+							}
+
+							if($("#password").val() == ""){
+								alert("비밀번호를 입력해주세요.");
+								$("#password").focus();
+								return false;
+							}
+
+							if($("#passwordConfirm").val() == ""){
+								alert("비밀번호 확인을 입력해주세요.");
+								$("#passwordConfirm").focus();
+								return false;
+							}
+
+							if($("#password").val() != $("#passwordConfirm").val()){
+								alert("비밀번호가 일치하지 않습니다.");
+								$("#passwordConfirm").val("");
+								$("#passwordConfirm").focus();
+								return false;
+							}
+
+							if($("#name").val() == ""){
+								alert("이름을 입력해주세요.");
+								$("#name").focus();
+								return false;
+							}
+
+							if($("#telephone").val() == ""){
+								alert("전화번호를 입력해주세요.");
+								$("#telephone").focus();
+								return false;
+							}
+
+							if($("#profileImg").val() == ""){
+								alert("프로필 사진을 첨부해주세요.");
+								$("#profileImg").focus();
+								return false;
+							}
+
+							//백엔드 REST API로 추출한 회원정보를 JSON데이터로 AJAX방식을 전송합니다.
+							var member = {
+								"email":$("#email").val(),
+								"password":$("#password").val(),
+								"name":$("#name").val(),
+								"telephone":$("#telephone").val(),
+								"profileImg":$("#profileImg").val(),
+							};
+
+							//jquery ajax메소드를 통해 수집된 프론트엔드 json데이터를 백엔드 RESTFul 라우팅메소드로 전달합니다.
+							$.post('/api/member/entry',member).done(function(result){
+								console.log("회원정보 등록결과 값: ",result);
+								location.href = "/";
+							});
+
+							return false;
+						});
+				</script>
