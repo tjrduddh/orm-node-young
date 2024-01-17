@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>cors 경험해보고 해결하기</h1>
+
+    <ul id="articles"></ul>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+    
+    $.get('http://localhost:3000/api/article/search',function(result){
+        console.log("백엔드에서 제공해주는 JSON 데이터", result);
+    })
+    
+    </script>
+</body>
+</html>
