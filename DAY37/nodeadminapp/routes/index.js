@@ -124,7 +124,7 @@ router.post('/passportlogin', async (req, res, next) => {
 
     //로그인 실패했다면
     if (!user) {
-      //flash - redirect되는 페이지에 마지막 데이터를 전달할 수 있는 방법
+      //flash - redirect되는 페이지에 마지막 데이터를 일회성으로 전달할 수 있는 방법
       req.flash('loginError', info.message);
       return res.redirect('/login');
     }
@@ -148,17 +148,34 @@ router.post('/passportlogin', async (req, res, next) => {
 
 //사용자 로그아웃 처리 라우팅 메소드
 //http://localhost:3001/logout
-router.get('/logout',isLoggedIn,async(req,res)=>{
+router.get('/logout',isLoggedIn,function(req,res,next){
 
-  // req.logout(function(err){
+  req.logout(function(err){
+
+    if(err){
+      return next(err);
+    }
+
+    //로그아웃하고 관리자 로그인 페이지로 이동 시키기
+    req.session.destroy();
+    res.redirect('/login');
+
+  });
+
+  //   req.logout(function(err){
+
+  //   if(err){
+  //     return next(err);
+  //   }
+
   //   //로그아웃하고 관리자 로그인 페이지로 이동 시키기
   //   req.session.destroy();
   //   res.redirect('/login');
+    
   // });
 
 
-
-  res.render('login')
+  // res.render('login')
 });
 
 
