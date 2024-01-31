@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var debug = require('debug')('nodeviewapp:server');
+
 //일회성(휘발성) 데이터를 특정 페이지(뷰)에 전달하는 방식제공 플래시 팩키지참조하기
 var flash = require('connect-flash');
 
@@ -13,6 +15,23 @@ require('dotenv').config();
 
 //express기반 서버세션 관리 패키지 참조하기 
 var session = require('express-session');
+
+//분산서버기반 세션 관리를 위한 Redis 환경설정1
+const redis = require("redis");
+let RedisStore = require("connect-redis")(session);
+
+
+
+//세션저장을 위한 레디스 서버 연결정보 설정하기
+let redisClient = redis.createClient({
+  host: "127.0.0.1",
+  port: 6379,
+  db: 0,
+  password: "test1",
+  });
+
+
+
 
 var sequelize = require('./models/index').sequelize;
 
@@ -48,19 +67,37 @@ sequelize.sync();
 passportConfig(passport);
 
 
-//express-session기반 서버세션 설정 구성하기 
+// //express-session기반 서버세션 설정 구성하기 
+// app.use(
+//   session({
+//     resave: false,//매번 세션 강제 저장 - 로그인시마다 세션구조/데이터 변경없어도 다시 저장여부 체크
+//     saveUninitialized: true, //빈 세션도 저장할지 여부. 기본 false ?
+//     secret: process.env.COOKIE_SECRET, //암호화할떄 사용하는 salt값
+//     cookie: {
+//       httpOnly: true, //javascript로 쿠키에 접근하지 못하게 하는 옵션
+//       secure: false, //https 환경에서만 session 정보를 주고받도록 처리
+//       maxAge:1000 * 60 * 20 //쿠키의 유효기간(= 세션의 유효기간) 설정: 20분동안 서버세션을 유지하겠다.(1000은 1초)
+//     },
+//   }),
+// );
+
+
+
 app.use(
-  session({
-    resave: false,//매번 세션 강제 저장 - 로그인시마다 세션구조/데이터 변경없어도 다시 저장여부 체크
-    saveUninitialized: true, //빈 세션도 저장할지 여부. 기본 false ?
-    secret: process.env.COOKIE_SECRET, //암호화할떄 사용하는 salt값
-    cookie: {
-      httpOnly: true, //javascript로 쿠키에 접근하지 못하게 하는 옵션
-      secure: false, //https 환경에서만 session 정보를 주고받도록 처리
-      maxAge:1000 * 60 * 20 //쿠키의 유효기간(= 세션의 유효기간) 설정: 20분동안 서버세션을 유지하겠다.(1000은 1초)
-    },
-  }),
-);
+    session({
+      store: new RedisStore({ client: redisClient }),
+        saveUninitialized: true,
+        secret: "secretkey",
+        resave: false,
+        cookie: {
+        httpOnly: true,
+        secure: false,
+        maxAge: 3600000, //세션유지 시간설정 : 1시간
+      },
+      ttl : 250, //Redis DB에서 세션정보가 사라지게 할지에 대한 만료시간설정
+      token: process.env.COOKIE_SECRET,
+    })
+  );
 
 //패스포트-세션 초기화 : express session 뒤에 설정
 app.use(passport.initialize());
@@ -111,4 +148,62 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+
+
+
+//노드앱의 기본 WAS 서비스 포트
+app.set('port', process.env.PORT || 3001);
+
+
+
+//노드앱의 작동되는 서버 객체 생성
+var server = app.listen(app.get('port'),function(){
+
+})
+
+
+server.on('error', onError);
+server.on('listening', onListening);
+
+
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
